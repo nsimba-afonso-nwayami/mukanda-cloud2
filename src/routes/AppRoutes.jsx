@@ -42,6 +42,8 @@ export default function AppRoutes() {
       <Route path="/redefinir-password" element={<ResetPassword />} />
       <Route path="/verificar-email" element={<VerificarEmail />} />
       <Route path="/acesso-negado" element={<AcessoNegado />} />
+
+      {/*Rotas do dashboard*/}
       
     </Routes>
   );
