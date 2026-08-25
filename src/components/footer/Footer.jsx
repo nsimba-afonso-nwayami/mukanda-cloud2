@@ -25,7 +25,7 @@ export default function Footer() {
               <a
                 href="#"
                 aria-label="LinkedIn"
-                className="w-10 h-10 rounded-lg bg-slate-900 border border-blue-900/30 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all shadow-sm"
+                className="w-10 h-10 rounded-full bg-slate-900 border border-blue-900/30 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all shadow-sm"
               >
                 <i className="fab fa-linkedin-in"></i>
               </a>
@@ -33,7 +33,7 @@ export default function Footer() {
               <a
                 href="#"
                 aria-label="Facebook"
-                className="w-10 h-10 rounded-lg bg-slate-900 border border-blue-900/30 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all shadow-sm"
+                className="w-10 h-10 rounded-full bg-slate-900 border border-blue-900/30 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all shadow-sm"
               >
                 <i className="fab fa-facebook-f"></i>
               </a>
@@ -41,7 +41,7 @@ export default function Footer() {
               <a
                 href="#"
                 aria-label="Instagram"
-                className="w-10 h-10 rounded-lg bg-slate-900 border border-blue-900/30 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all shadow-sm"
+                className="w-10 h-10 rounded-full bg-slate-900 border border-blue-900/30 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all shadow-sm"
               >
                 <i className="fab fa-instagram"></i>
               </a>

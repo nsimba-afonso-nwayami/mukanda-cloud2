@@ -75,7 +75,7 @@ export default function ComoFunciona() {
             Pronto para simplificar a gestão dos seus documentos?
           </p>
 
-          <Button to="/cadastrar" iconRight="fas fa-arrow-right">
+          <Button to="/cadastrar">
             Criar a minha conta
           </Button>
         </div>

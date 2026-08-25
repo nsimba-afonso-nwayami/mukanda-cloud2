@@ -16,7 +16,7 @@ export default function Parallax() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-28 w-full">
         <div className="max-w-3xl mx-auto text-center">
           {/* Ícone com destaque central */}
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-500 text-2xl shadow-[0_0_25px_rgba(6,182,212,0.15)]">
+          <div className="mx-auto w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-500 text-2xl shadow-[0_0_25px_rgba(6,182,212,0.15)]">
             <i className="fas fa-cloud"></i>
           </div>
 
@@ -37,7 +37,6 @@ export default function Parallax() {
             <Button
               to="/cadastrar"
               variant="primary"
-              iconRight="fas fa-arrow-right"
             >
               Começar agora
             </Button>
@@ -45,7 +44,6 @@ export default function Parallax() {
             <Button
               to="/#contato"
               variant="secondary"
-              iconRight="fas fa-headset"
             >
               Falar com a equipa
             </Button>

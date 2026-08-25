@@ -79,8 +79,6 @@ export default function NossaPrivacidade() {
               <Button
                 to="/cadastrar"
                 variant="primary"
-                iconRight="fas fa-arrow-right"
-                className="px-8 py-4 rounded-xl shadow-[0_0_30px_rgba(6,182,212,0.3)]"
               >
                 Começar agora
               </Button>
@@ -88,8 +86,6 @@ export default function NossaPrivacidade() {
               <Button
                 to="/seguranca"
                 variant="secondary"
-                iconRight="fas fa-shield-halved"
-                className="px-8 py-4 rounded-xl"
               >
                 Ver segurança
               </Button>

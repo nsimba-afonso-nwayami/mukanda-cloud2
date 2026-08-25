@@ -80,7 +80,7 @@ export default function Hero() {
 
                   {/* Botões de Ação */}
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-8">
-                    <Button to="/cadastrar" iconRight="fas fa-arrow-right">
+                    <Button to="/cadastrar">
                       Começar agora
                     </Button>
 

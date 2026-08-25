@@ -26,13 +26,10 @@ export default function RecuperarPassword() {
                 to="/"
                 className="inline-flex items-center gap-2 text-white text-lg font-semibold"
               >
-                <span className="w-9 h-9 rounded-lg bg-cyan-500 flex items-center justify-center">
-                  <i className="fas fa-cloud text-slate-950 text-sm"></i>
-                </span>
                 Mukanda Cloud
               </Link>
 
-              <div className="mx-auto mt-7 w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500">
+              <div className="mx-auto mt-7 w-12 h-12 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500">
                 <i className="fas fa-key"></i>
               </div>
 

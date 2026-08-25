@@ -82,7 +82,6 @@ export default function NossaSeguranca() {
               <Button
                 to="/cadastrar"
                 variant="primary"
-                iconRight="fas fa-arrow-right"
               >
                 Começar agora
               </Button>
@@ -90,7 +89,6 @@ export default function NossaSeguranca() {
               <Button
                 to="/#contato"
                 variant="secondary"
-                iconRight="fas fa-headset"
               >
                 Fale connosco
               </Button>

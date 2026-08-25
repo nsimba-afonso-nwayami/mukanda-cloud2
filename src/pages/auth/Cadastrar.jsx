@@ -25,9 +25,6 @@ export default function Register() {
                 to="/"
                 className="inline-flex items-center gap-2 text-white text-lg font-semibold"
               >
-                <span className="w-9 h-9 rounded-lg bg-cyan-500 flex items-center justify-center">
-                  <i className="fas fa-cloud text-slate-950 text-sm"></i>
-                </span>
                 Mukanda Cloud
               </Link>
 
@@ -171,7 +168,7 @@ export default function Register() {
                   </Link>{" "}
                   e a{" "}
                   <Link
-                    to="/privacidade"
+                    to="/politica-privacidade"
                     className="text-cyan-500 hover:text-cyan-300 transition"
                   >
                     Política de privacidade

@@ -25,14 +25,11 @@ export default function VerificarEmail() {
                 to="/"
                 className="inline-flex items-center gap-2 text-white text-lg font-semibold"
               >
-                <span className="w-9 h-9 rounded-lg bg-cyan-500 flex items-center justify-center">
-                  <i className="fas fa-cloud text-slate-950 text-sm"></i>
-                </span>
                 Mukanda Cloud
               </Link>
 
               {/* Ícone */}
-              <div className="mx-auto mt-8 w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 text-xl">
+              <div className="mx-auto mt-8 w-14 h-14 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 text-xl">
                 <i className="fas fa-envelope-circle-check"></i>
               </div>
 

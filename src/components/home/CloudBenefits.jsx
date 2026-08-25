@@ -61,7 +61,7 @@ export default function CloudBenefits() {
               className="group bg-slate-900/60 border border-blue-900/40 rounded-xl p-6 md:p-7 text-center hover:border-cyan-500/50 hover:bg-slate-900 transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] flex flex-col items-center"
             >
               {/* Container do Ícone */}
-              <div className="w-12 h-12 mx-auto rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 text-lg group-hover:border-cyan-500/50 group-hover:text-cyan-300 group-hover:bg-cyan-500/20 transition-all duration-300">
+              <div className="w-12 h-12 mx-auto rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 text-lg group-hover:border-cyan-500/50 group-hover:text-cyan-300 group-hover:bg-cyan-500/20 transition-all duration-300">
                 <i className={benefit.icon}></i>
               </div>
 

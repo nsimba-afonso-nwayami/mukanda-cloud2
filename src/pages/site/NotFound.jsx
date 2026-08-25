@@ -29,7 +29,7 @@ export default function NotFound() {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-            <Button to="/" variant="primary" fullWidth iconLeft="fas fa-house">
+            <Button to="/" variant="primary" fullWidth>
               Voltar ao início
             </Button>
 
@@ -37,7 +37,6 @@ export default function NotFound() {
               to="/suporte"
               variant="secondary"
               fullWidth
-              iconLeft="fas fa-headset"
             >
               Suporte
             </Button>

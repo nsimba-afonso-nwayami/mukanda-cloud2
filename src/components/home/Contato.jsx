@@ -31,7 +31,7 @@ export default function Contato() {
                 href="mailto:suporte@mukandacloud.com"
                 className="flex items-start gap-4 group w-fit"
               >
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
                   <i className="fas fa-envelope text-lg"></i>
                 </div>
 
@@ -51,7 +51,7 @@ export default function Contato() {
                 href="tel:+244900000000"
                 className="flex items-start gap-4 group w-fit"
               >
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
                   <i className="fas fa-phone text-lg"></i>
                 </div>
 
@@ -73,7 +73,7 @@ export default function Contato() {
                 rel="noopener noreferrer"
                 className="flex items-start gap-4 group w-fit"
               >
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
                   <i className="fas fa-location-dot text-lg"></i>
                 </div>
 
