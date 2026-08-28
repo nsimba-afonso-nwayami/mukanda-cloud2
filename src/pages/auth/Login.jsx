@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Button from "../../components/Button";
-import LoginBg from "../../assets/img/login.jpg";
+import LoginBg from "../../assets/img/login2.jpg";
 
 export default function Login() {
   return (

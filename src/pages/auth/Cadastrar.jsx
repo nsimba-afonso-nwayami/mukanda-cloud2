@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Button from "../../components/Button";
-import RegisterBg from "../../assets/img/cadastro.jpg";
+import RegisterBg from "../../assets/img/cadastro2.jpg";
 
 export default function Register() {
   return (
