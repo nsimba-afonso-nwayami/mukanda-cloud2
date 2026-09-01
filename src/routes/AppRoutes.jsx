@@ -22,6 +22,11 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import VerificarEmail from "../pages/auth/VerificarEmail";
 import AcessoNegado from "../pages/auth/AcessoNegado";
 
+//Dashboard
+import Dashboard from "../pages/dashboard/Dashboard";
+import NotFoundDashboard from "../pages/dashboard/NotFoundDashboard";
+
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -44,7 +49,10 @@ export default function AppRoutes() {
       <Route path="/acesso-negado" element={<AcessoNegado />} />
 
       {/*Rotas do dashboard*/}
-      
+      <Route path="/dashboard">
+        <Route path="" element={<Dashboard />} />
+        <Route path="*" element={<NotFoundDashboard />} />
+      </Route>
     </Routes>
   );
 }
