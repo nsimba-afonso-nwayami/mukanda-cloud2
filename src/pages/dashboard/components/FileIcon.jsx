@@ -1,5 +1,11 @@
 export default function FileIcon({ type, size = "md" }) {
   const icons = {
+    folder: {
+      icon: "fas fa-folder",
+      color: "text-cyan-400",
+      bg: "bg-cyan-500/10",
+    },
+
     pdf: {
       icon: "fas fa-file-pdf",
       color: "text-red-400",
