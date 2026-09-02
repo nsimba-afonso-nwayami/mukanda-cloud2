@@ -5,7 +5,13 @@ import FileContextMenu from "./FileContextMenu";
 
 export default function FilesView({ files = [] }) {
   const [search, setSearch] = useState("");
+
+  /*
+   * O layout inicial pode futuramente vir da API.
+   * Por enquanto usamos "list" como fallback.
+   */
   const [layout, setLayout] = useState("list");
+
   const [contextMenu, setContextMenu] = useState(null);
 
   const searchRef = useRef(null);
@@ -16,235 +22,269 @@ export default function FilesView({ files = [] }) {
 
   const searchResults = search ? filteredFiles.slice(0, 5) : [];
 
+  /*
+   * Fechar menu contextual com ESC
+   * e quando clicar fora dele.
+   */
   useEffect(() => {
-    const handleEscape = (event) => {
+    const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         setContextMenu(null);
       }
     };
 
-    document.addEventListener("keydown", handleEscape);
+    const handleClickOutside = () => {
+      setContextMenu(null);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
+  /*
+   * Alterar layout.
+   *
+   * Neste momento altera apenas o estado local.
+   * Quando ligarmos ao backend, esta função será responsável
+   * também por guardar a preferência do utilizador.
+   */
+  const handleChangeLayout = (newLayout) => {
+    setLayout(newLayout);
+
+    // Futuramente:
+    // await userService.updatePreferences({ file_layout: newLayout });
+  };
+
+  /*
+   * Menu contextual
+   */
   const handleContextMenu = (event, file) => {
     event.preventDefault();
+    event.stopPropagation();
 
     const menuWidth = 208;
     const menuHeight = 220;
+    const margin = 10;
 
     let left = event.clientX;
     let top = event.clientY;
 
     if (left + menuWidth > window.innerWidth) {
-      left = window.innerWidth - menuWidth - 10;
+      left = window.innerWidth - menuWidth - margin;
     }
 
     if (top + menuHeight > window.innerHeight) {
-      top = window.innerHeight - menuHeight - 10;
+      top = window.innerHeight - menuHeight - margin;
     }
 
     setContextMenu({
       file,
       position: {
-        top,
-        left,
+        top: Math.max(margin, top),
+        left: Math.max(margin, left),
       },
     });
   };
 
   const handleOpen = (file) => {
+    setContextMenu(null);
     console.log("Abrir arquivo:", file);
   };
 
   const handleDownload = (file) => {
+    setContextMenu(null);
     console.log("Baixar arquivo:", file);
   };
 
   const handleRename = (file) => {
+    setContextMenu(null);
     console.log("Renomear arquivo:", file);
   };
 
   const handleShare = (file) => {
+    setContextMenu(null);
     console.log("Partilhar arquivo:", file);
   };
 
   return (
     <div className="space-y-8">
-      {/* PESQUISA + AÇÕES */}
-      <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-        {/* Pesquisa */}
-        <div ref={searchRef} className="relative flex-1 max-w-2xl">
-          <div
+      {/* PESQUISA */}
+      <div ref={searchRef} className="relative w-full">
+        <div
+          className="
+            flex items-center
+            w-full
+            bg-slate-950
+            border border-blue-900/40
+            rounded-xl
+            overflow-hidden
+            focus-within:border-cyan-500/50
+            transition
+          "
+        >
+          <i className="fas fa-search text-slate-500 ml-4"></i>
+
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Pesquisar arquivos..."
             className="
-              flex items-center
-              bg-slate-950
-              border border-blue-900/40
-              rounded-xl
-              overflow-hidden
-              focus-within:border-cyan-500/50
-              transition
+              w-full
+              bg-transparent
+              px-3 py-3.5
+              text-sm
+              text-white
+              placeholder:text-slate-500
+              outline-none
             "
-          >
-            <i className="fas fa-search text-slate-500 ml-4"></i>
+          />
 
-            <input
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Pesquisar arquivos..."
-              className="
-                w-full
-                bg-transparent
-                px-3 py-3.5
-                text-sm
-                text-white
-                placeholder:text-slate-500
-                outline-none
-              "
-            />
-
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                className="
-                  mr-3
-                  text-slate-500
-                  hover:text-white
-                  transition
-                "
-                aria-label="Limpar pesquisa"
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            )}
-          </div>
-
-          {/* RESULTADOS DA PESQUISA */}
           {search && (
-            <div
+            <button
+              type="button"
+              onClick={() => setSearch("")}
               className="
-                absolute
-                top-full
-                left-0
-                right-0
-                mt-2
-                z-30
-                bg-slate-950
-                border border-blue-900/40
-                rounded-xl
-                shadow-2xl
-                overflow-hidden
+                mr-3
+                text-slate-500
+                hover:text-white
+                transition
               "
+              aria-label="Limpar pesquisa"
             >
-              {searchResults.length > 0 ? (
-                <div className="p-1.5">
-                  {searchResults.map((file) => (
-                    <button
-                      key={file.id}
-                      type="button"
-                      onClick={() => handleOpen(file)}
-                      className="
-                        w-full
-                        flex items-center gap-3
-                        px-3 py-3
-                        rounded-lg
-                        text-left
-                        hover:bg-slate-900
-                        transition
-                      "
-                    >
-                      <FileIcon type={file.type} size="sm" />
-
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm text-white truncate">
-                          {file.name}
-                        </p>
-
-                        <p className="text-xs text-slate-500 mt-0.5">
-                          {file.location}
-                        </p>
-                      </div>
-
-                      <i className="fas fa-arrow-up-right-from-square text-xs text-slate-600"></i>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="px-4 py-6 text-center">
-                  <i className="fas fa-file-circle-question text-slate-600 text-xl"></i>
-
-                  <p className="mt-2 text-sm text-slate-400">
-                    Nenhum arquivo encontrado
-                  </p>
-                </div>
-              )}
-            </div>
+              <i className="fas fa-times"></i>
+            </button>
           )}
         </div>
 
-        {/* AÇÕES */}
-        <div className="flex items-center gap-2">
-          {/* Layout */}
+        {/* RESULTADOS DA PESQUISA */}
+        {search && (
           <div
             className="
-              flex items-center
+              absolute
+              top-full
+              left-0
+              right-0
+              mt-2
+              z-30
               bg-slate-950
               border border-blue-900/40
               rounded-xl
-              p-1
+              shadow-2xl
+              overflow-hidden
             "
           >
-            <button
-              type="button"
-              onClick={() => setLayout("grid")}
-              className={`
-                w-9 h-9
-                rounded-lg
-                flex items-center justify-center
-                transition
-                ${
-                  layout === "grid"
-                    ? "bg-cyan-500/10 text-cyan-500"
-                    : "text-slate-500 hover:text-white"
-                }
-              `}
-              aria-label="Visualização em grelha"
-            >
-              <i className="fas fa-grid-2"></i>
-            </button>
+            {searchResults.length > 0 ? (
+              <div className="p-1.5">
+                {searchResults.map((file) => (
+                  <button
+                    key={file.id}
+                    type="button"
+                    onClick={() => handleOpen(file)}
+                    className="
+                      w-full
+                      flex items-center gap-3
+                      px-3 py-3
+                      rounded-lg
+                      text-left
+                      hover:bg-slate-900
+                      transition
+                    "
+                  >
+                    <FileIcon type={file.type} size="sm" />
 
-            <button
-              type="button"
-              onClick={() => setLayout("list")}
-              className={`
-                w-9 h-9
-                rounded-lg
-                flex items-center justify-center
-                transition
-                ${
-                  layout === "list"
-                    ? "bg-cyan-500/10 text-cyan-500"
-                    : "text-slate-500 hover:text-white"
-                }
-              `}
-              aria-label="Visualização em lista"
-            >
-              <i className="fas fa-list"></i>
-            </button>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm text-white truncate">{file.name}</p>
+
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        {file.location}
+                      </p>
+                    </div>
+
+                    <i className="fas fa-arrow-up-right-from-square text-xs text-slate-600"></i>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="px-4 py-6 text-center">
+                <i className="fas fa-file-circle-question text-slate-600 text-xl"></i>
+
+                <p className="mt-2 text-sm text-slate-400">
+                  Nenhum arquivo encontrado
+                </p>
+              </div>
+            )}
           </div>
+        )}
+      </div>
 
-          <Button
-            iconLeft="fas fa-plus"
-            onClick={() => console.log("Novo arquivo")}
+      {/* AÇÕES */}
+      <div className="flex items-center justify-between gap-4">
+        {/* LAYOUT */}
+        <div
+          className="
+            flex items-center
+            bg-slate-950
+            border border-blue-900/40
+            rounded-xl
+            p-1
+          "
+        >
+          <button
+            type="button"
+            onClick={() => handleChangeLayout("grid")}
+            className={`
+              w-9 h-9
+              rounded-lg
+              flex items-center justify-center
+              transition
+              cursor-pointer
+              ${
+                layout === "grid"
+                  ? "bg-cyan-500/10 text-cyan-500"
+                  : "text-slate-500 hover:text-white"
+              }
+            `}
+            aria-label="Visualização em grelha"
+            aria-pressed={layout === "grid"}
           >
-            Novo
-          </Button>
+            <i className="fas fa-th-large"></i>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleChangeLayout("list")}
+            className={`
+              w-9 h-9
+              rounded-lg
+              flex items-center justify-center
+              transition
+              cursor-pointer
+              ${
+                layout === "list"
+                  ? "bg-cyan-500/10 text-cyan-500"
+                  : "text-slate-500 hover:text-white"
+              }
+            `}
+            aria-label="Visualização em lista"
+            aria-pressed={layout === "list"}
+          >
+            <i className="fas fa-list"></i>
+          </button>
         </div>
+
+        {/* NOVO */}
+        <Button
+          iconLeft="fas fa-plus"
+          onClick={() => console.log("Novo arquivo")}
+        >
+          Novo
+        </Button>
       </div>
 
       {/* CABEÇALHO */}
