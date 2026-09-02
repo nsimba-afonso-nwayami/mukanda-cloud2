@@ -5,7 +5,7 @@ import FileContextMenu from "./FileContextMenu";
 
 export default function FilesView({ files = [] }) {
   const [search, setSearch] = useState("");
-  const [layout, setLayout] = useState("grid");
+  const [layout, setLayout] = useState("list");
   const [contextMenu, setContextMenu] = useState(null);
 
   const searchRef = useRef(null);
