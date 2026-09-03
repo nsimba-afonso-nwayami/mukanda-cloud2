@@ -26,6 +26,10 @@ import AcessoNegado from "../pages/auth/AcessoNegado";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Documentos from "../pages/dashboard/Documentos";
 import Pastas from "../pages/dashboard/Pastas";
+import Partilhados from "../pages/dashboard/Partilhados";
+import Utilizadores from "../pages/dashboard/Utilizadores";
+import Permissoes from "../pages/dashboard/Permissoes";
+import Atividades from "../pages/dashboard/Atividades";
 import NotFoundDashboard from "../pages/dashboard/NotFoundDashboard";
 
 
@@ -55,6 +59,10 @@ export default function AppRoutes() {
         <Route path="" element={<Dashboard />} />
         <Route path="documentos" element={<Documentos />} />
         <Route path="pastas" element={<Pastas />} />
+        <Route path="partilhados" element={<Partilhados />} />
+        <Route path="utilizadores" element={<Utilizadores />} />
+        <Route path="permissoes" element={<Permissoes />} />
+        <Route path="atividade" element={<Atividades />} />
         <Route path="*" element={<NotFoundDashboard />} />
       </Route>
     </Routes>
