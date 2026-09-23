@@ -28,8 +28,7 @@ import Documentos from "../pages/dashboard/Documentos";
 import Pastas from "../pages/dashboard/Pastas";
 import Partilhados from "../pages/dashboard/Partilhados";
 import Utilizadores from "../pages/dashboard/Utilizadores";
-import Departamentos from "../pages/dashboard/Departamentos";
-import Permissoes from "../pages/dashboard/Permissoes";
+import Empresa from "../pages/dashboard/Empresa";
 import Atividades from "../pages/dashboard/Atividades";
 import Armazenamento from "../pages/dashboard/Armazenamento";
 import Configuracoes from "../pages/dashboard/Configuracoes";
@@ -64,8 +63,7 @@ export default function AppRoutes() {
         <Route path="pastas" element={<Pastas />} />
         <Route path="partilhados" element={<Partilhados />} />
         <Route path="utilizadores" element={<Utilizadores />} />
-        <Route path="departamentos" element={<Departamentos />} />
-        <Route path="permissoes" element={<Permissoes />} />
+        <Route path="empresa" element={<Empresa />} />
         <Route path="atividade" element={<Atividades />} />
         <Route path="armazenamento" element={<Armazenamento />} />
         <Route path="configuracoes" element={<Configuracoes />} />
