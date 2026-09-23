@@ -3,16 +3,8 @@ import Button from "../../../components/Button";
 
 export default function UsersView({ users = [], onCreateUser }) {
   const [search, setSearch] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-
-  /*
-   * Departamentos disponíveis
-   */
-  const departments = useMemo(() => {
-    return [...new Set(users.map((user) => user.department))].filter(Boolean);
-  }, [users]);
 
   /*
    * Utilizadores filtrados
@@ -25,17 +17,14 @@ export default function UsersView({ users = [], onCreateUser }) {
         user.name.toLowerCase().includes(searchValue) ||
         user.email.toLowerCase().includes(searchValue);
 
-      const matchesDepartment =
-        departmentFilter === "all" || user.department === departmentFilter;
-
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
 
       const matchesStatus =
         statusFilter === "all" || user.status === statusFilter;
 
-      return matchesSearch && matchesDepartment && matchesRole && matchesStatus;
+      return matchesSearch && matchesRole && matchesStatus;
     });
-  }, [users, search, departmentFilter, roleFilter, statusFilter]);
+  }, [users, search, roleFilter, statusFilter]);
 
   /*
    * Iniciais do utilizador
@@ -83,10 +72,6 @@ export default function UsersView({ users = [], onCreateUser }) {
     console.log("Editar utilizador:", user);
   };
 
-  const handlePermissions = (user) => {
-    console.log("Gerir permissões:", user);
-  };
-
   const handleSuspend = (user) => {
     console.log("Suspender utilizador:", user);
   };
@@ -122,7 +107,7 @@ export default function UsersView({ users = [], onCreateUser }) {
       </div>
 
       {/* PESQUISA E FILTROS */}
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_180px_170px_150px]">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_170px_150px]">
         {/* PESQUISA */}
         <div
           className="
@@ -170,32 +155,6 @@ export default function UsersView({ users = [], onCreateUser }) {
             </button>
           )}
         </div>
-
-        {/* DEPARTAMENTO */}
-        <select
-          value={departmentFilter}
-          onChange={(event) => setDepartmentFilter(event.target.value)}
-          className="
-            w-full
-            bg-slate-950
-            border border-blue-900/40
-            rounded-xl
-            px-4 py-3
-            text-sm
-            text-slate-300
-            outline-none
-            focus:border-cyan-500/50
-            transition
-          "
-        >
-          <option value="all">Departamentos</option>
-
-          {departments.map((department) => (
-            <option key={department} value={department}>
-              {department}
-            </option>
-          ))}
-        </select>
 
         {/* FUNÇÃO */}
         <select
@@ -252,9 +211,7 @@ export default function UsersView({ users = [], onCreateUser }) {
         </p>
       </div>
 
-      {/* =====================================================
-          DESKTOP
-      ===================================================== */}
+      {/*  DESKTOP */}
       <div
         className="
           hidden
@@ -269,7 +226,7 @@ export default function UsersView({ users = [], onCreateUser }) {
         <div
           className="
             grid
-            grid-cols-[minmax(220px,1.5fr)_160px_140px_130px_140px_48px]
+            grid-cols-[minmax(220px,1.5fr)_140px_130px_140px_48px]
             items-center
             gap-4
             px-5 py-3
@@ -281,7 +238,6 @@ export default function UsersView({ users = [], onCreateUser }) {
           "
         >
           <span>Utilizador</span>
-          <span>Departamento</span>
           <span>Função</span>
           <span>Estado</span>
           <span>Último acesso</span>
@@ -298,7 +254,7 @@ export default function UsersView({ users = [], onCreateUser }) {
                 className="
                   group
                   grid
-                  grid-cols-[minmax(220px,1.5fr)_160px_140px_130px_140px_48px]
+                  grid-cols-[minmax(220px,1.5fr)_140px_130px_140px_48px]
                   items-center
                   gap-4
                   px-5 py-4
@@ -337,11 +293,6 @@ export default function UsersView({ users = [], onCreateUser }) {
                   </div>
                 </div>
 
-                {/* DEPARTAMENTO */}
-                <span className="text-sm text-slate-400 truncate">
-                  {user.department}
-                </span>
-
                 {/* FUNÇÃO */}
                 <span className="text-sm text-slate-400 truncate">
                   {user.role}
@@ -376,7 +327,6 @@ export default function UsersView({ users = [], onCreateUser }) {
                 <UserActions
                   user={user}
                   onEdit={handleEdit}
-                  onPermissions={handlePermissions}
                   onSuspend={handleSuspend}
                   onDelete={handleDelete}
                 />
@@ -388,9 +338,7 @@ export default function UsersView({ users = [], onCreateUser }) {
         )}
       </div>
 
-      {/* =====================================================
-          MOBILE
-      ===================================================== */}
+      {/*  MOBILE */}
       <div className="md:hidden space-y-3">
         {filteredUsers.length > 0 ? (
           filteredUsers.map((user) => {
@@ -437,7 +385,6 @@ export default function UsersView({ users = [], onCreateUser }) {
                   <UserActions
                     user={user}
                     onEdit={handleEdit}
-                    onPermissions={handlePermissions}
                     onSuspend={handleSuspend}
                     onDelete={handleDelete}
                   />
@@ -454,17 +401,6 @@ export default function UsersView({ users = [], onCreateUser }) {
                     gap-4
                   "
                 >
-                  {/* DEPARTAMENTO */}
-                  <div>
-                    <p className="text-[11px] text-slate-600 uppercase tracking-wide">
-                      Departamento
-                    </p>
-
-                    <p className="text-xs text-slate-400 mt-1 truncate">
-                      {user.department}
-                    </p>
-                  </div>
-
                   {/* FUNÇÃO */}
                   <div>
                     <p className="text-[11px] text-slate-600 uppercase tracking-wide">
@@ -522,11 +458,9 @@ export default function UsersView({ users = [], onCreateUser }) {
   );
 }
 
-/* =========================================================
-   AÇÕES DO UTILIZADOR
-========================================================= */
+/* AÇÕES DO UTILIZADOR */
 
-function UserActions({ user, onEdit, onPermissions, onSuspend, onDelete }) {
+function UserActions({ user, onEdit, onSuspend, onDelete }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -568,6 +502,7 @@ function UserActions({ user, onEdit, onPermissions, onSuspend, onDelete }) {
             p-1.5
           "
         >
+          {/* EDITAR */}
           <button
             type="button"
             onClick={() => {
@@ -590,28 +525,7 @@ function UserActions({ user, onEdit, onPermissions, onSuspend, onDelete }) {
             Editar
           </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              setOpen(false);
-              onPermissions(user);
-            }}
-            className="
-              w-full
-              flex items-center gap-3
-              px-3 py-2.5
-              rounded-lg
-              text-sm text-slate-400
-              hover:text-white
-              hover:bg-slate-900
-              transition
-              text-left
-            "
-          >
-            <i className="fas fa-shield-halved w-4 text-center"></i>
-            Permissões
-          </button>
-
+          {/* SUSPENDER */}
           <button
             type="button"
             onClick={() => {
@@ -636,6 +550,7 @@ function UserActions({ user, onEdit, onPermissions, onSuspend, onDelete }) {
 
           <div className="my-1 border-t border-blue-900/30"></div>
 
+          {/* ELIMINAR */}
           <button
             type="button"
             onClick={() => {
@@ -663,9 +578,7 @@ function UserActions({ user, onEdit, onPermissions, onSuspend, onDelete }) {
   );
 }
 
-/* =========================================================
-   ESTADO VAZIO
-========================================================= */
+/* ESTADO VAZIO */
 
 function EmptyState() {
   return (

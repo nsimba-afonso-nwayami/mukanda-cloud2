@@ -124,28 +124,16 @@ export default function SidebarDashboard({ sidebarOpen, setSidebarOpen }) {
             Utilizadores
           </Link>
 
-          {/* Departamentos */}
-          <Link
-            to="/dashboard/departamentos"
-            onClick={() => setSidebarOpen(false)}
-            className={`${linkStyle} ${
-              isActive("/dashboard/departamentos") ? activeStyle : normalStyle
-            }`}
-          >
-            <i className="fas fa-building w-5"></i>
-            Departamentos
-          </Link>
-
-          {/* Permissões */}
-          <Link
-            to="/dashboard/permissoes"
-            onClick={() => setSidebarOpen(false)}
-            className={`${linkStyle} ${
-              isActive("/dashboard/permissoes") ? activeStyle : normalStyle
-            }`}
-          >
-            <i className="fas fa-user-lock w-5"></i>
-            Permissões
+          {/* Empresa */}
+          <Link 
+            to="/dashboard/empresa" 
+            onClick={() => setSidebarOpen(false)} 
+            className={`${linkStyle} ${ 
+              isActive("/dashboard/empresa") ? activeStyle : normalStyle 
+            }`} 
+          > 
+            <i className="fas fa-building w-5"></i> 
+            Empresa 
           </Link>
 
           {/* Atividade */}

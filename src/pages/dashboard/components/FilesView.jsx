@@ -5,13 +5,6 @@ import FileContextMenu from "./FileContextMenu";
 
 export default function FilesView({ files = [] }) {
   const [search, setSearch] = useState("");
-
-  /*
-   * O layout inicial pode futuramente vir da API.
-   * Por enquanto usamos "list" como fallback.
-   */
-  const [layout, setLayout] = useState("list");
-
   const [contextMenu, setContextMenu] = useState(null);
 
   const searchRef = useRef(null);
@@ -45,20 +38,6 @@ export default function FilesView({ files = [] }) {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-
-  /*
-   * Alterar layout.
-   *
-   * Neste momento altera apenas o estado local.
-   * Quando ligarmos ao backend, esta função será responsável
-   * também por guardar a preferência do utilizador.
-   */
-  const handleChangeLayout = (newLayout) => {
-    setLayout(newLayout);
-
-    // Futuramente:
-    // await userService.updatePreferences({ file_layout: newLayout });
-  };
 
   /*
    * Menu contextual
@@ -199,7 +178,9 @@ export default function FilesView({ files = [] }) {
                     <FileIcon type={file.type} size="sm" />
 
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-white truncate">{file.name}</p>
+                      <p className="text-sm text-white truncate">
+                        {file.name}
+                      </p>
 
                       <p className="text-xs text-slate-500 mt-0.5">
                         {file.location}
@@ -224,61 +205,7 @@ export default function FilesView({ files = [] }) {
       </div>
 
       {/* AÇÕES */}
-      <div className="flex items-center justify-between gap-4">
-        {/* LAYOUT */}
-        <div
-          className="
-            flex items-center
-            bg-slate-950
-            border border-blue-900/40
-            rounded-xl
-            p-1
-          "
-        >
-          <button
-            type="button"
-            onClick={() => handleChangeLayout("grid")}
-            className={`
-              w-9 h-9
-              rounded-lg
-              flex items-center justify-center
-              transition
-              cursor-pointer
-              ${
-                layout === "grid"
-                  ? "bg-cyan-500/10 text-cyan-500"
-                  : "text-slate-500 hover:text-white"
-              }
-            `}
-            aria-label="Visualização em grelha"
-            aria-pressed={layout === "grid"}
-          >
-            <i className="fas fa-th-large"></i>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleChangeLayout("list")}
-            className={`
-              w-9 h-9
-              rounded-lg
-              flex items-center justify-center
-              transition
-              cursor-pointer
-              ${
-                layout === "list"
-                  ? "bg-cyan-500/10 text-cyan-500"
-                  : "text-slate-500 hover:text-white"
-              }
-            `}
-            aria-label="Visualização em lista"
-            aria-pressed={layout === "list"}
-          >
-            <i className="fas fa-list"></i>
-          </button>
-        </div>
-
-        {/* NOVO */}
+      <div className="flex items-center justify-end">
         <Button
           iconLeft="fas fa-plus"
           onClick={() => console.log("Novo arquivo")}
@@ -297,7 +224,9 @@ export default function FilesView({ files = [] }) {
           </p>
         </div>
 
-        <span className="text-xs text-slate-500">{files.length} arquivos</span>
+        <span className="text-xs text-slate-500">
+          {files.length} arquivos
+        </span>
       </div>
 
       {/* ARQUIVOS */}
@@ -319,17 +248,6 @@ export default function FilesView({ files = [] }) {
           <p className="mt-1 text-xs text-slate-600">
             Comece por adicionar um arquivo ao seu espaço.
           </p>
-        </div>
-      ) : layout === "grid" ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {files.map((file) => (
-            <FileCard
-              key={file.id}
-              file={file}
-              onContextMenu={handleContextMenu}
-              onOpen={handleOpen}
-            />
-          ))}
         </div>
       ) : (
         <div
@@ -367,60 +285,6 @@ export default function FilesView({ files = [] }) {
   );
 }
 
-/* CARD — GRELHA */
-
-function FileCard({ file, onContextMenu, onOpen }) {
-  return (
-    <div
-      onContextMenu={(event) => onContextMenu(event, file)}
-      onDoubleClick={() => onOpen(file)}
-      className="
-        group
-        relative
-        bg-slate-950
-        border border-blue-900/40
-        rounded-2xl
-        p-5
-        cursor-pointer
-        hover:border-cyan-500/30
-        hover:bg-slate-900/70
-        transition
-      "
-    >
-      <div className="flex items-start justify-between">
-        <FileIcon type={file.type} size="md" />
-
-        <button
-          type="button"
-          onClick={(event) => onContextMenu(event, file)}
-          className="
-            w-8 h-8
-            flex items-center justify-center
-            rounded-lg
-            text-slate-600
-            hover:text-white
-            hover:bg-slate-800
-            opacity-0
-            group-hover:opacity-100
-            transition
-          "
-          aria-label={`Opções de ${file.name}`}
-        >
-          <i className="fas fa-ellipsis-vertical"></i>
-        </button>
-      </div>
-
-      <div className="mt-5 min-w-0">
-        <p className="text-sm font-medium text-white truncate">{file.name}</p>
-
-        <p className="mt-1 text-xs text-slate-500 truncate">
-          {file.size} · {file.date}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 /* ITEM — LISTA */
 
 function FileListItem({ file, onContextMenu, onOpen }) {
@@ -442,7 +306,9 @@ function FileListItem({ file, onContextMenu, onOpen }) {
       <FileIcon type={file.type} size="sm" />
 
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-white truncate">{file.name}</p>
+        <p className="text-sm font-medium text-white truncate">
+          {file.name}
+        </p>
       </div>
 
       <div className="hidden sm:block w-28 text-xs text-slate-500">

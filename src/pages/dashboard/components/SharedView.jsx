@@ -5,7 +5,6 @@ import FolderContextMenu from "./FolderContextMenu";
 
 export default function SharedView({ sharedItems = [] }) {
   const [search, setSearch] = useState("");
-  const [layout, setLayout] = useState("list");
   const [contextMenu, setContextMenu] = useState(null);
 
   const searchRef = useRef(null);
@@ -33,18 +32,6 @@ export default function SharedView({ sharedItems = [] }) {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
-  /*
-   * Alterar layout
-   */
-  const handleChangeLayout = (newLayout) => {
-    setLayout(newLayout);
-
-    // Futuramente:
-    // await userService.updatePreferences({
-    //   shared_layout: newLayout,
-    // });
-  };
 
   /*
    * Abrir item
@@ -265,62 +252,6 @@ export default function SharedView({ sharedItems = [] }) {
         )}
       </div>
 
-      {/* AÇÕES */}
-      <div className="flex items-center justify-between gap-4">
-        {/* LAYOUT */}
-        <div
-          className="
-            flex items-center
-            bg-slate-950
-            border border-blue-900/40
-            rounded-xl
-            p-1
-          "
-        >
-          <button
-            type="button"
-            onClick={() => handleChangeLayout("grid")}
-            className={`
-              w-9 h-9
-              rounded-lg
-              flex items-center justify-center
-              transition
-              cursor-pointer
-              ${
-                layout === "grid"
-                  ? "bg-cyan-500/10 text-cyan-500"
-                  : "text-slate-500 hover:text-white"
-              }
-            `}
-            aria-label="Visualização em grelha"
-            aria-pressed={layout === "grid"}
-          >
-            <i className="fas fa-th-large"></i>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleChangeLayout("list")}
-            className={`
-              w-9 h-9
-              rounded-lg
-              flex items-center justify-center
-              transition
-              cursor-pointer
-              ${
-                layout === "list"
-                  ? "bg-cyan-500/10 text-cyan-500"
-                  : "text-slate-500 hover:text-white"
-              }
-            `}
-            aria-label="Visualização em lista"
-            aria-pressed={layout === "list"}
-          >
-            <i className="fas fa-list"></i>
-          </button>
-        </div>
-      </div>
-
       {/* CABEÇALHO */}
       <div className="flex items-center justify-between gap-4">
         <div>
@@ -366,27 +297,6 @@ export default function SharedView({ sharedItems = [] }) {
           <p className="mt-1 text-xs text-slate-600">
             Os arquivos e pastas partilhados consigo aparecerão aqui.
           </p>
-        </div>
-      ) : layout === "grid" ? (
-        <div
-          className="
-            grid
-            grid-cols-2
-            sm:grid-cols-3
-            lg:grid-cols-4
-            xl:grid-cols-5
-            gap-4
-          "
-        >
-          {filteredItems.map((item) => (
-            <SharedCard
-              key={item.id}
-              item={item}
-              onOpen={handleOpen}
-              onContextMenu={handleContextMenu}
-              onActionMenu={handleActionMenu}
-            />
-          ))}
         </div>
       ) : (
         <div
@@ -435,68 +345,6 @@ export default function SharedView({ sharedItems = [] }) {
           onShare={handleShare}
         />
       )}
-    </div>
-  );
-}
-
-/* =========================================================
-   PARTILHADO — GRELHA
-========================================================= */
-
-function SharedCard({ item, onOpen, onContextMenu, onActionMenu }) {
-  const isFolder = item.itemType === "folder";
-
-  return (
-    <div
-      onContextMenu={(event) => onContextMenu(event, item)}
-      onDoubleClick={() => onOpen(item)}
-      className="
-        group
-        relative
-        bg-slate-950
-        border border-blue-900/40
-        rounded-2xl
-        p-5
-        cursor-pointer
-        hover:border-cyan-500/30
-        hover:bg-slate-900/70
-        transition
-      "
-    >
-      <div className="flex items-start justify-between">
-        <FileIcon type={isFolder ? "folder" : item.type} size="md" />
-
-        <button
-          type="button"
-          onClick={(event) => onActionMenu(event, item)}
-          className="
-            w-8 h-8
-            flex items-center justify-center
-            rounded-lg
-            text-slate-600
-            hover:text-white
-            hover:bg-slate-800
-            opacity-0
-            group-hover:opacity-100
-            transition
-          "
-          aria-label={`Opções de ${item.name}`}
-        >
-          <i className="fas fa-ellipsis-vertical"></i>
-        </button>
-      </div>
-
-      <div className="mt-5 min-w-0">
-        <p className="text-sm font-medium text-white truncate">{item.name}</p>
-
-        <p className="mt-1 text-xs text-slate-500 truncate">
-          {isFolder ? "Pasta" : item.size}
-        </p>
-
-        <p className="mt-2 text-xs text-slate-600 truncate">
-          Partilhado por {item.sharedBy}
-        </p>
-      </div>
     </div>
   );
 }

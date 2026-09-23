@@ -11,9 +11,7 @@ export default function FoldersView({
   onUpload,
 }) {
   const [search, setSearch] = useState("");
-  const [layout, setLayout] = useState("list");
   const [currentFolderId, setCurrentFolderId] = useState(null);
-
   const [contextMenu, setContextMenu] = useState(null);
 
   const searchRef = useRef(null);
@@ -76,18 +74,6 @@ export default function FoldersView({
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-
-  /*
-   * Alterar layout
-   */
-  const handleChangeLayout = (newLayout) => {
-    setLayout(newLayout);
-
-    // Futuramente:
-    // await userService.updatePreferences({
-    //   file_layout: newLayout,
-    // });
-  };
 
   /*
    * Abrir pasta
@@ -370,80 +356,18 @@ export default function FoldersView({
       </div>
 
       {/* AÇÕES */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {/* LAYOUT */}
-        <div
-          className="
-            flex items-center
-            bg-slate-950
-            border border-blue-900/40
-            rounded-xl
-            p-1
-            w-fit
-          "
+      <div className="flex items-center justify-end gap-2">
+        <Button
+          variant="secondary"
+          iconLeft="fas fa-folder-plus"
+          onClick={onCreateFolder}
         >
-          <button
-            type="button"
-            onClick={() => handleChangeLayout("grid")}
-            className={`
-        w-9 h-9
-        rounded-lg
-        flex items-center justify-center
-        transition
-        cursor-pointer
-        ${
-          layout === "grid"
-            ? "bg-cyan-500/10 text-cyan-500"
-            : "text-slate-500 hover:text-white"
-        }
-      `}
-            aria-label="Visualização em grelha"
-            aria-pressed={layout === "grid"}
-          >
-            <i className="fas fa-th-large"></i>
-          </button>
+          Nova pasta
+        </Button>
 
-          <button
-            type="button"
-            onClick={() => handleChangeLayout("list")}
-            className={`
-        w-9 h-9
-        rounded-lg
-        flex items-center justify-center
-        transition
-        cursor-pointer
-        ${
-          layout === "list"
-            ? "bg-cyan-500/10 text-cyan-500"
-            : "text-slate-500 hover:text-white"
-        }
-      `}
-            aria-label="Visualização em lista"
-            aria-pressed={layout === "list"}
-          >
-            <i className="fas fa-list"></i>
-          </button>
-        </div>
-
-        {/* AÇÕES */}
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Button
-            variant="secondary"
-            iconLeft="fas fa-folder-plus"
-            onClick={onCreateFolder}
-            className="flex-1 sm:flex-none"
-          >
-            Nova pasta
-          </Button>
-
-          <Button
-            iconLeft="fas fa-upload"
-            onClick={onUpload}
-            className="flex-1 sm:flex-none"
-          >
-            Upload
-          </Button>
-        </div>
+        <Button iconLeft="fas fa-upload" onClick={onUpload}>
+          Upload
+        </Button>
       </div>
 
       {/* BREADCRUMB */}
@@ -560,26 +484,6 @@ export default function FoldersView({
             Crie uma pasta ou faça upload de um arquivo.
           </p>
         </div>
-      ) : layout === "grid" ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {currentFolders.map((folder) => (
-            <FolderCard
-              key={`folder-${folder.id}`}
-              folder={folder}
-              onOpen={handleOpenFolder}
-              onContextMenu={handleContextMenu}
-            />
-          ))}
-
-          {currentFiles.map((file) => (
-            <FileCard
-              key={`file-${file.id}`}
-              file={file}
-              onOpen={handleOpenFile}
-              onContextMenu={handleContextMenu}
-            />
-          ))}
-        </div>
       ) : (
         <div
           className="
@@ -640,62 +544,6 @@ export default function FoldersView({
 }
 
 /* =========================================================
-   PASTA — GRELHA
-========================================================= */
-
-function FolderCard({ folder, onOpen, onContextMenu }) {
-  return (
-    <div
-      onContextMenu={(event) => onContextMenu(event, folder, "folder")}
-      onDoubleClick={() => onOpen(folder)}
-      className="
-        group
-        relative
-        bg-slate-950
-        border border-blue-900/40
-        rounded-2xl
-        p-5
-        cursor-pointer
-        hover:border-cyan-500/30
-        hover:bg-slate-900/70
-        transition
-      "
-    >
-      <div className="flex items-start justify-between">
-        <FileIcon type="folder" size="md" />
-
-        <button
-          type="button"
-          onClick={(event) => onContextMenu(event, folder, "folder")}
-          className="
-            w-8 h-8
-            flex items-center justify-center
-            rounded-lg
-            text-slate-600
-            hover:text-white
-            hover:bg-slate-800
-            opacity-0
-            group-hover:opacity-100
-            transition
-          "
-          aria-label={`Opções de ${folder.name}`}
-        >
-          <i className="fas fa-ellipsis-vertical"></i>
-        </button>
-      </div>
-
-      <div className="mt-5 min-w-0">
-        <p className="text-sm font-medium text-white truncate">{folder.name}</p>
-
-        <p className="mt-1 text-xs text-slate-500 truncate">
-          Pasta · {folder.date}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-/* =========================================================
    PASTA — LISTA
 ========================================================= */
 
@@ -745,62 +593,6 @@ function FolderListItem({ folder, onOpen, onContextMenu }) {
       >
         <i className="fas fa-ellipsis-vertical"></i>
       </button>
-    </div>
-  );
-}
-
-/* =========================================================
-   ARQUIVO — GRELHA
-========================================================= */
-
-function FileCard({ file, onOpen, onContextMenu }) {
-  return (
-    <div
-      onContextMenu={(event) => onContextMenu(event, file, "file")}
-      onDoubleClick={() => onOpen(file)}
-      className="
-        group
-        relative
-        bg-slate-950
-        border border-blue-900/40
-        rounded-2xl
-        p-5
-        cursor-pointer
-        hover:border-cyan-500/30
-        hover:bg-slate-900/70
-        transition
-      "
-    >
-      <div className="flex items-start justify-between">
-        <FileIcon type={file.type} size="md" />
-
-        <button
-          type="button"
-          onClick={(event) => onContextMenu(event, file, "file")}
-          className="
-            w-8 h-8
-            flex items-center justify-center
-            rounded-lg
-            text-slate-600
-            hover:text-white
-            hover:bg-slate-800
-            opacity-0
-            group-hover:opacity-100
-            transition
-          "
-          aria-label={`Opções de ${file.name}`}
-        >
-          <i className="fas fa-ellipsis-vertical"></i>
-        </button>
-      </div>
-
-      <div className="mt-5 min-w-0">
-        <p className="text-sm font-medium text-white truncate">{file.name}</p>
-
-        <p className="mt-1 text-xs text-slate-500 truncate">
-          {file.size} · {file.date}
-        </p>
-      </div>
     </div>
   );
 }
