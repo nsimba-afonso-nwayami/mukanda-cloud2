@@ -1,7 +1,14 @@
-import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export default function SidebarDashboard({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const { logout } = useAuth();
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -11,6 +18,22 @@ export default function SidebarDashboard({ sidebarOpen, setSidebarOpen }) {
   const normalStyle = "text-slate-400 hover:text-white hover:bg-slate-900";
 
   const activeStyle = "bg-cyan-500/10 text-cyan-500 border border-cyan-500/10";
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+
+    try {
+      setIsLoggingOut(true);
+
+      await logout();
+
+      navigate("/entrar", { replace: true });
+    } catch (error) {
+      console.error("Erro ao terminar sessão:", error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <>
@@ -125,15 +148,15 @@ export default function SidebarDashboard({ sidebarOpen, setSidebarOpen }) {
           </Link>
 
           {/* Empresa */}
-          <Link 
-            to="/dashboard/empresa" 
-            onClick={() => setSidebarOpen(false)} 
-            className={`${linkStyle} ${ 
-              isActive("/dashboard/empresa") ? activeStyle : normalStyle 
-            }`} 
-          > 
-            <i className="fas fa-building w-5"></i> 
-            Empresa 
+          <Link
+            to="/dashboard/empresa"
+            onClick={() => setSidebarOpen(false)}
+            className={`${linkStyle} ${
+              isActive("/dashboard/empresa") ? activeStyle : normalStyle
+            }`}
+          >
+            <i className="fas fa-building w-5"></i>
+            Empresa
           </Link>
 
           {/* Atividade */}
@@ -205,6 +228,8 @@ export default function SidebarDashboard({ sidebarOpen, setSidebarOpen }) {
         <div className="pt-4 mt-4 border-t border-blue-900/40">
           <button
             type="button"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
             className="
               w-full
               cursor-pointer
@@ -218,8 +243,10 @@ export default function SidebarDashboard({ sidebarOpen, setSidebarOpen }) {
               transition
             "
           >
-            <i className="fas fa-arrow-right-from-bracket w-5"></i>
-            Sair da conta
+            <i
+              className={`w-5 ${isLoggingOut ? "fas fa-spinner fa-spin" : "fas fa-arrow-right-from-bracket"}`}
+            ></i>
+            {isLoggingOut ? "A terminar sessão..." : "Sair da conta"}
           </button>
         </div>
       </aside>
