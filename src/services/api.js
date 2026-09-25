@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "";
+const API_URL = "https://azulenovo.hossidev.com/api/";
 //const API_URL = "/api/";
 
 export const api = axios.create({
@@ -8,4 +8,5 @@ export const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
