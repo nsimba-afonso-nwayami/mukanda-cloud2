@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export default function HeaderDashboard({
   sidebarOpen,
@@ -6,6 +7,9 @@ export default function HeaderDashboard({
   title,
 }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const fullName = `${user?.first_name || ""} ${user?.last_name || ""}`.trim();
 
   return (
     <header
@@ -70,9 +74,13 @@ export default function HeaderDashboard({
       <div className="flex items-center gap-4">
         {/* Utilizador */}
         <div className="hidden sm:block text-right">
-          <p className="text-sm font-medium text-white">Utilizador</p>
+          <p className="text-sm font-medium text-white">
+            {fullName || user?.username || "Utilizador"}
+          </p>
 
-          <p className="text-xs text-slate-500">Conta empresarial</p>
+          <p className="text-xs text-slate-500">
+            @{user?.username || "utilizador"}
+          </p>
         </div>
 
         {/* Perfil */}
