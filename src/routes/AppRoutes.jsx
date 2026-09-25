@@ -3,8 +3,8 @@ import { Routes, Route } from "react-router-dom";
 // Layout do site
 import SiteLayout from "../layouts/SiteLayout";
 
-// 
-//import PrivateRoute from "../routes/PrivateRoute";
+// Proteção de rotas
+import PrivateRoute from "../routes/PrivateRoute";
 
 //Site
 import Home from "../pages/site/Home";
@@ -57,17 +57,19 @@ export default function AppRoutes() {
       <Route path="/acesso-negado" element={<AcessoNegado />} />
 
       {/*Rotas do dashboard*/}
-      <Route path="/dashboard/">
-        <Route path="" element={<Dashboard />} />
-        <Route path="documentos" element={<Documentos />} />
-        <Route path="pastas" element={<Pastas />} />
-        <Route path="partilhados" element={<Partilhados />} />
-        <Route path="utilizadores" element={<Utilizadores />} />
-        <Route path="empresa" element={<Empresa />} />
-        <Route path="atividade" element={<Atividades />} />
-        <Route path="armazenamento" element={<Armazenamento />} />
-        <Route path="configuracoes" element={<Configuracoes />} />
-        <Route path="*" element={<NotFoundDashboard />} />
+      <Route element={<PrivateRoute />}>
+        <Route path="/dashboard/">
+          <Route path="" element={<Dashboard />} />
+          <Route path="documentos" element={<Documentos />} />
+          <Route path="pastas" element={<Pastas />} />
+          <Route path="partilhados" element={<Partilhados />} />
+          <Route path="utilizadores" element={<Utilizadores />} />
+          <Route path="empresa" element={<Empresa />} />
+          <Route path="atividade" element={<Atividades />} />
+          <Route path="armazenamento" element={<Armazenamento />} />
+          <Route path="configuracoes" element={<Configuracoes />} />
+          <Route path="*" element={<NotFoundDashboard />} />
+        </Route>
       </Route>
     </Routes>
   );
