@@ -1,8 +1,50 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import toast from "react-hot-toast";
+
 import Button from "../../components/Button";
 import RegisterBg from "../../assets/img/cadastro2.jpg";
 
+import { register as registerUser } from "../../services/authService";
+import { registerSchema } from "../../validations/registerSchema";
+
 export default function Register() {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      first_name: "",
+      last_name: "",
+      password: "",
+      password_confirm: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      await registerUser(data);
+
+      toast.success("Conta criada com sucesso!");
+
+      navigate("/entrar");
+    } catch (error) {
+      const message =
+        error?.response?.data?.detail ||
+        error?.response?.data?.message ||
+        "Não foi possível criar a conta. Tente novamente.";
+
+      toast.error(message);
+    }
+  };
+
   return (
     <>
       <title>Criar conta | Mukanda Cloud</title>
@@ -38,8 +80,35 @@ export default function Register() {
             </div>
 
             {/* Formulário */}
-            <form className="mt-6 space-y-4">
-              {/* Nome + Empresa */}
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+              {/* Username */}
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Nome de utilizador
+                </label>
+
+                <div className="relative">
+                  <i className="fas fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+
+                  <input
+                    type="text"
+                    placeholder="Nome de utilizador"
+                    autoComplete="username"
+                    {...register("username")}
+                    className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                      errors.username ? "border-red-500" : "border-white/10"
+                    } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
+                  />
+                </div>
+
+                {errors.username && (
+                  <p className="mt-1.5 text-xs text-red-400">
+                    {errors.username.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Nome + Apelido */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Nome */}
                 <div>
@@ -53,26 +122,46 @@ export default function Register() {
                     <input
                       type="text"
                       placeholder="Seu nome"
-                      className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
+                      autoComplete="given-name"
+                      {...register("first_name")}
+                      className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                        errors.first_name ? "border-red-500" : "border-white/10"
+                      } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
                     />
                   </div>
+
+                  {errors.first_name && (
+                    <p className="mt-1.5 text-xs text-red-400">
+                      {errors.first_name.message}
+                    </p>
+                  )}
                 </div>
 
-                {/* Empresa */}
+                {/* Apelido */}
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Empresa
+                    Apelido
                   </label>
 
                   <div className="relative">
-                    <i className="fas fa-building absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                    <i className="fas fa-user-tag absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
 
                     <input
                       type="text"
-                      placeholder="Nome da empresa"
-                      className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
+                      placeholder="Seu apelido"
+                      autoComplete="family-name"
+                      {...register("last_name")}
+                      className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                        errors.last_name ? "border-red-500" : "border-white/10"
+                      } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
                     />
                   </div>
+
+                  {errors.last_name && (
+                    <p className="mt-1.5 text-xs text-red-400">
+                      {errors.last_name.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -88,26 +177,19 @@ export default function Register() {
                   <input
                     type="email"
                     placeholder="nome@empresa.com"
-                    className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
+                    autoComplete="email"
+                    {...register("email")}
+                    className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                      errors.email ? "border-red-500" : "border-white/10"
+                    } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
                   />
                 </div>
-              </div>
 
-              {/* Telefone */}
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Telefone
-                </label>
-
-                <div className="relative">
-                  <i className="fas fa-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-
-                  <input
-                    type="tel"
-                    placeholder="+244 900 000 000"
-                    className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
-                  />
-                </div>
+                {errors.email && (
+                  <p className="mt-1.5 text-xs text-red-400">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               {/* Passwords */}
@@ -124,9 +206,19 @@ export default function Register() {
                     <input
                       type="password"
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
+                      autoComplete="new-password"
+                      {...register("password")}
+                      className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                        errors.password ? "border-red-500" : "border-white/10"
+                      } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
                     />
                   </div>
+
+                  {errors.password && (
+                    <p className="mt-1.5 text-xs text-red-400">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Confirmar */}
@@ -141,9 +233,21 @@ export default function Register() {
                     <input
                       type="password"
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
+                      autoComplete="new-password"
+                      {...register("password_confirm")}
+                      className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                        errors.password_confirm
+                          ? "border-red-500"
+                          : "border-white/10"
+                      } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
                     />
                   </div>
+
+                  {errors.password_confirm && (
+                    <p className="mt-1.5 text-xs text-red-400">
+                      {errors.password_confirm.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -182,6 +286,8 @@ export default function Register() {
                 type="submit"
                 variant="primary"
                 fullWidth
+                loading={isSubmitting}
+                loadingText="A criar conta..."
               >
                 Criar conta
               </Button>
