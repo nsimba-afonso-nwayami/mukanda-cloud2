@@ -1,8 +1,50 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import toast from "react-hot-toast";
+
 import Button from "../../components/Button";
 import LoginBg from "../../assets/img/login2.jpg";
 
+import { useAuth } from "../../contexts/AuthContext";
+import { loginSchema } from "../../validations/loginSchema";
+
 export default function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await login(data);
+
+      console.log("Resposta do login:", response);
+
+      toast.success("Login efetuado com sucesso!");
+      
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Erro no login:", error);
+
+      const message =
+        error?.response?.data?.detail ||
+        error?.response?.data?.message ||
+        "Nome de utilizador ou palavra-passe inválidos.";
+      toast.error(message);
+    }
+  };
+
   return (
     <>
       <title>Entrar | Mukanda Cloud</title>
@@ -38,22 +80,32 @@ export default function Login() {
             </div>
 
             {/* Formulário */}
-            <form className="mt-6 space-y-4">
-              {/* Email */}
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+              {/* Username */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Email
+                  Nome de utilizador
                 </label>
 
                 <div className="relative">
-                  <i className="fas fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                  <i className="fas fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
 
                   <input
-                    type="email"
-                    placeholder="nome@empresa.com"
-                    className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
+                    type="text"
+                    placeholder="Nome de utilizador"
+                    autoComplete="username"
+                    {...register("username")}
+                    className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                      errors.username ? "border-red-500" : "border-white/10"
+                    } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
                   />
                 </div>
+
+                {errors.username && (
+                  <p className="mt-1.5 text-xs text-red-400">
+                    {errors.username.message}
+                  </p>
+                )}
               </div>
 
               {/* Palavra-passe */}
@@ -77,9 +129,19 @@ export default function Login() {
                   <input
                     type="password"
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition"
+                    autoComplete="current-password"
+                    {...register("password")}
+                    className={`w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-950/40 border ${
+                      errors.password ? "border-red-500" : "border-white/10"
+                    } text-sm text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 focus:bg-slate-950/60 transition`}
                   />
                 </div>
+
+                {errors.password && (
+                  <p className="mt-1.5 text-xs text-red-400">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
               {/* Botão */}
@@ -87,6 +149,8 @@ export default function Login() {
                 type="submit"
                 variant="primary"
                 fullWidth
+                loading={isSubmitting}
+                loadingText="A entrar..."
               >
                 Entrar
               </Button>
